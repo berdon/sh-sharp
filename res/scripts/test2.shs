@@ -2,13 +2,13 @@ using System;
 using System.IO;
 
 <#zsh
-    echo "How could this be useful?"
+echo "How could this be useful?"
 #>
 
 for (var i = 0; i < 5; i++) {
-<#zsh
+    <#zsh
     echo "I'll give you {i} reasons"
-#>
+    #>
 }
 
 <#zsh
