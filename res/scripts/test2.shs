@@ -1,0 +1,20 @@
+using System;
+using System.IO;
+
+<#zsh
+    echo "How could this be useful?"
+#>
+
+for (var i = 0; i < 5; i++) {
+<#zsh
+    echo "I'll give you {i} reasons"
+#>
+}
+
+<#zsh
+files=$(ls)
+#>
+
+foreach (var file in (Var["files"] as string).Split('\n')) {
+    Console.WriteLine(Path(file));
+}

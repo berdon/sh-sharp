@@ -1,0 +1,25 @@
+using System;
+using System.IO;
+
+<#zsh
+    pwd
+#>
+
+Console.WriteLine(CurrentWorkingDirectory);
+
+<#zsh
+    cd /
+#>
+
+Console.WriteLine(CurrentWorkingDirectory);
+
+<#zsh
+    pwd
+    echo {CurrentWorkingDirectory}
+#>
+
+<#zsh
+testVar=$(echo 'asdf')
+#>
+
+Console.WriteLine(Var["testVar"]);
