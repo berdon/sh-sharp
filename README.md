@@ -27,14 +27,23 @@ foreach (var file in (Var["files"] as string).Split('\n')) {
 
 ## Output
 ```shell
-    echo "I'll give you 6 reasons"
-I'll give you 6 reasons
-    echo "I'll give you 7 reasons"
-I'll give you 7 reasons
-    echo "I'll give you 8 reasons"
-I'll give you 8 reasons
-    echo "I'll give you 9 reasons"
-I'll give you 9 reasons
+echo "How could this be useful?"
+How could this be useful?
+    echo "I'll give you 0 reasons"
+    
+I'll give you 0 reasons
+    echo "I'll give you 1 reasons"
+    
+I'll give you 1 reasons
+    echo "I'll give you 2 reasons"
+    
+I'll give you 2 reasons
+    echo "I'll give you 3 reasons"
+    
+I'll give you 3 reasons
+    echo "I'll give you 4 reasons"
+    
+I'll give you 4 reasons
 files=$(ls)
 /github/sh-sharp/LICENSE
 /github/sh-sharp/README.md
