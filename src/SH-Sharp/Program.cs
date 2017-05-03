@@ -3,6 +3,7 @@ using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
 using SH_Sharp.Interpreter;
+using SH_Sharp.Shell;
 
 namespace SH_Sharp
 {
@@ -20,9 +21,12 @@ namespace SH_Sharp
                 }
 
                 var serviceCollection = new ServiceCollection();
+                serviceCollection.AddSingleton<ShellProvider>();
+                serviceCollection.AddSingleton<ExecutionContext>();
                 var provider = serviceCollection.BuildServiceProvider();
 
-                return await new CSharpInterpreter(file.Value, echo.HasValue(), provider).RunAsync();
+                var interpreter = (IInterpreter) ActivatorUtilities.CreateInstance(provider, typeof(CSharpInterpreter), file.Value, echo.HasValue());
+                return await interpreter.RunAsync();
             });
             application.Execute(args);
         }

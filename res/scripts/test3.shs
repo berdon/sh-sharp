@@ -1,0 +1,42 @@
+// Console stuff
+public void ShowProgress(string message, int current, int max, int ticks) {
+    int x = Console.CursorLeft;
+    int y = Console.CursorTop;
+    float percent = current / (float) max;
+    Console.WriteLine($"{new String(' ', ticks + 6 - message.Length)}");
+    Console.Write($"\r{message}{new String(' ', ticks + 6 - message.Length)}\n");
+    Console.Write($"\r[ {(100 * percent):n0}% {new String('#', (int) Math.Round((float) ticks * current / max))}]");
+    Console.SetCursorPosition(x, y);
+}
+
+public void ClearScreen() {
+    <#zsh clear #>
+}
+
+// Build Stages
+var stages = new string[]{ "Clean", "Restore", "Prebuild", "Build", "Test", "Assemble", "Publish" };
+
+// Complex CLI build scripts
+<#zsh
+build_stage() {{
+    echo "Building Stage $$1"
+}}
+#>
+
+// Clear the screen
+ClearScreen();
+
+// Iterate through each build stage
+for (var i = 0; i < stages.Length; i++) {
+    // Execute the build step
+    <#zsh build_stage "{stages[i]}" #>
+
+    for (var j = 0; j < 100; j++) {
+        // Show progress
+        ShowProgress($"Doing some level of work {i}", j, 100, 80);
+        
+        // Simulate work
+        await Task.Delay(10);
+    }
+}
+

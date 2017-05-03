@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 <#zsh
 echo "How could this be useful?"
 #>
@@ -15,6 +12,6 @@ for (var i = 0; i < 5; i++) {
 files=$(ls)
 #>
 
-foreach (var file in (Var["files"] as string).Split('\n')) {
-    Console.WriteLine(Path(file));
+foreach (var file in (Var.files).Split('\n')) {
+    Console.WriteLine(new FileInfo(Path(file)));
 }

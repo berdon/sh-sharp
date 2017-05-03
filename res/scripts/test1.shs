@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 <#zsh
     pwd
 #>
@@ -22,4 +19,4 @@ Console.WriteLine(CurrentWorkingDirectory);
 testVar=$(echo 'asdf')
 #>
 
-Console.WriteLine(Var["testVar"]);
+Console.WriteLine(Var.testVar);

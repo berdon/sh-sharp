@@ -13,7 +13,6 @@ namespace SH_Sharp.Shell
         StreamReader Error { get; }
 
         Task StartAsync();
-
         Task<ExecutionResult> ExecuteAsync(string commands);
     }
 
@@ -22,6 +21,6 @@ namespace SH_Sharp.Shell
         public int ResultCode { get; set; }
         public string CurrentWorkingDirectory { get; set; }
         public Dictionary<string, string> Environment { get; set; }
-        public Dictionary<string, object> Variables { get; set; }
+        public Dictionary<string, dynamic> Variables { get; set; }
     }
 }

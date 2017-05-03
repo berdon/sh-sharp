@@ -6,6 +6,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Linq;
+using System.Dynamic;
+using SH_Sharp.Helpers;
 
 namespace SH_Sharp.Shell
 {
@@ -22,7 +24,7 @@ namespace SH_Sharp.Shell
             _process.StartInfo.FileName = "/bin/zsh";
             _process.StartInfo.RedirectStandardInput = true;
             _process.StartInfo.RedirectStandardOutput = true;
-            _process.StartInfo.RedirectStandardError = true;
+            _process.StartInfo.RedirectStandardError = false;
             _process.StartInfo.CreateNoWindow = true;
             _process.StartInfo.UseShellExecute = false;
             _process.Start();
@@ -31,7 +33,7 @@ namespace SH_Sharp.Shell
         }
 
         public async Task<ExecutionResult> ExecuteAsync(string commands) {
-            Console.WriteLine(commands);
+            //Console.WriteLine(commands);
             await Input.WriteLineAsync(commands);
             await Input.WriteLineAsync(@"echo ""DONE""");
             await Input.WriteLineAsync(@"env");
@@ -43,8 +45,19 @@ namespace SH_Sharp.Shell
             await Input.FlushAsync();
 
             string outputLine;
-            while((outputLine = await Output.ReadLineAsync()) != "DONE") {
-                Console.WriteLine(outputLine);
+            var trail = new List<char>(new []{' '});
+            int c;
+            while((c = Output.Read()) != -1) {
+                trail.Add((char)c);
+                if (trail.Count() > 5) {
+                    Console.Write(trail[0]);
+                    Console.Out.Flush();
+                    trail.RemoveAt(0);
+
+                    if (string.Join("", trail).Equals("DONE\n")) {
+                        break;
+                    }
+                }
             }
             
             // Read in environment variables
@@ -80,8 +93,8 @@ namespace SH_Sharp.Shell
             };
         }
 
-        private Dictionary<string, object> ParseTypesetResponse(string data) {
-            var variables = new Dictionary<string, object>();
+        private Dictionary<string, dynamic> ParseTypesetResponse(string data) {
+            var variables = new Dictionary<string, dynamic>();
             int position = 0;
             while (position < data.Length) {
                 var line = ReadToNext(data, ref position, true, '=', '\n');
@@ -113,7 +126,7 @@ namespace SH_Sharp.Shell
             return variables;
         }
 
-        private void ParseTypesetString(Dictionary<string, object> variables, string[] words, string data, ref int position) {
+        private void ParseTypesetString(Dictionary<string, dynamic> variables, string[] words, string data, ref int position) {
             var variableName = TrimString(words.LastOrDefault().Trim());
             if (String.IsNullOrWhiteSpace(variableName)) {
                 ReadToNextLine(data, ref position);
@@ -122,7 +135,7 @@ namespace SH_Sharp.Shell
             variables[variableName] = TrimString(ReadToNextLine(data, ref position).Trim());
         }
 
-        private void ParseTypesetArray(Dictionary<string, object> variables, string[] words, string data, ref int position) {
+        private void ParseTypesetArray(Dictionary<string, dynamic> variables, string[] words, string data, ref int position) {
             var variableName = TrimString(words.LastOrDefault().Trim());
             if (String.IsNullOrWhiteSpace(variableName)) {
                 ReadToNextLine(data, ref position);
@@ -134,14 +147,14 @@ namespace SH_Sharp.Shell
                 .ToArray();
         }
 
-        private void ParseTypesetAssociation(Dictionary<string, object> variables, string[] words, string data, ref int position) {
+        private void ParseTypesetAssociation(Dictionary<string, dynamic> variables, string[] words, string data, ref int position) {
             var variableName = TrimString(words.LastOrDefault().Trim());
             if (String.IsNullOrWhiteSpace(variableName)) {
                 ReadToNextLine(data, ref position);
                 return;
             }
 
-            var dictionary = new Dictionary<string, object>();
+            var dictionary = new Dictionary<string, dynamic>();
             var keyValues = SplitStrings(ReadToNextLine(data, ref position).Trim()).Select(s => TrimString(s)).ToArray();
             for (var i = 0; i < keyValues.Length; i += 2) {
                 dictionary[keyValues[i]] = keyValues[i + 1];
@@ -149,7 +162,7 @@ namespace SH_Sharp.Shell
             variables[variableName] = dictionary;
         }
 
-        private void ParseTypesetInteger(Dictionary<string, object> variables, string[] words, string data, ref int position) {
+        private void ParseTypesetInteger(Dictionary<string, dynamic> variables, string[] words, string data, ref int position) {
             var variableName = TrimString(words.LastOrDefault().Trim());
             if (String.IsNullOrWhiteSpace(variableName)) {
                 ReadToNextLine(data, ref position);
@@ -238,7 +251,7 @@ namespace SH_Sharp.Shell
         }
 
         public void Dispose() {
-            // Nothing
+            _process?.Dispose();
         }
     }
 }
