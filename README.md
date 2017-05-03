@@ -2,13 +2,11 @@
 PHP+C# for the command line. Yes, that's right.
 
 ## Example
+[41 line script file doing the following:](https://github.com/berdon/sh-sharp/blob/master/res/scripts/test3.shs)
 ![SH-Sharp Example GIF](https://github.com/berdon/sh-sharp/blob/master/res/shsharp.gif?raw=true)
 
 ### A simpler example
 ```c#
-using System;
-using System.IO;
-
 <#zsh
 echo "How could this be useful?"
 #>
@@ -23,8 +21,8 @@ for (var i = 0; i < 5; i++) {
 files=$(ls)
 #>
 
-foreach (var file in (Var["files"] as string).Split('\n')) {
-    Console.WriteLine(Path(file));
+foreach (var file in (Var.files).Split('\n')) {
+    Console.WriteLine(new FileInfo(Path(file)));
 }
 ```
 
