@@ -2,6 +2,9 @@
 PHP+C# for the command line. Yes, that's right.
 
 ## Example
+![SH-Sharp Example GIF](https://github.com/berdon/sh-sharp/blob/master/res/shsharp.gif?raw=true)
+
+### A simpler example
 ```c#
 using System;
 using System.IO;
