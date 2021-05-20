@@ -1,3 +1,5 @@
+#!/Users/ahanson/workspace/landfill/sh-sharp/res/scripts/sh-sharp
+
 // Console stuff
 public void ShowProgress(string message, int current, int max, int ticks) {
     int x = Console.CursorLeft;

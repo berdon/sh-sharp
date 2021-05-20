@@ -1,0 +1,2 @@
+#!/bin/bash
+dotnet run -p /Users/ahanson/workspace/landfill/sh-sharp/src/SH-Sharp/SH-Sharp.csproj "--" "$@"
